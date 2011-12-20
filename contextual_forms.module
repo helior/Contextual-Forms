@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ *   This module currently provides Ctools Content-types out of forms that are
+ *   registered through hook_contextual_forms_info().
+ */
+
+include "contextual_forms.modules.inc";
+
+/******************************************************************************
+ * Contrib hooks
+ *****************************************************************************/
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function contextual_forms_ctools_plugin_directory($owner, $api) {
+  if ($owner == 'ctools' && $api == 'content_types') {
+    return 'plugins/' . $api;
+  }
+}
+
+/**
+ * Retrieve the results of hook_contextual_forms_info().
+ */
+function contextual_forms_info() {
+  if ($info = cache_get(__FUNCTION__)) {
+    $info = $info->data;
+  }
+
+  // Build info and cache it.
+  else {
+    $hook = 'contextual_forms_info';
+    foreach (module_implements($hook) as $module) {
+      $results = array();
+      $function = $module . '_' . $hook;
+      $results = $function();
+      
+      foreach ($results as $name => $result) {
+        $result += array(
+          'title' => $name,
+          'description' => '',
+          'module' => $module,
+          'function' => $name,
+        );
+        $info[$name] = $result;
+      }
+    }
+
+    drupal_alter('contextual_forms_info', $info);
+    cache_set(__FUNCTION__, $info);
+  }
+
+  return $info;
+}
