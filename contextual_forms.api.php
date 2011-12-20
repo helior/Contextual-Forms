@@ -8,6 +8,8 @@
  * - description: A short description of what the form does.
  * - function: (optional) Specify the function name that is the form builder,
  *   defaults to the machine name.
+ * - category: (optional) Place the form in a specified content category in
+ *   Page Manager.
  * - includes: (optional) Specify the file to include for the form builder, as
  *   is expected by $form_state['build_info']['files'].
  *   @see form_load_include(). Keys required are:
@@ -28,6 +30,7 @@ function hook_contextual_forms_info() {
   $forms['mymod_subscribe'] = array(
     'title' => 'MyMod Subscription Form',
     'description' => 'A form for requesting information from subscribers.',
+    'category' => t('My Module'),
     'include' => array(      
       // The form resides in mymod.admin.inc
       'module' => 'mymod',

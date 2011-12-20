@@ -1,6 +1,5 @@
 name = Contextual Forms
 description = Allows forms to be registered and put to use as Ctools' content-types.
 core = 7.x
-version = 7.x-1.0-alpha1
 
 dependencies[] = ctools
