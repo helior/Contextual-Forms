@@ -84,7 +84,26 @@ function contextual_forms_content_type_info() {
     ) + _contextual_forms_content_type_defaults();
     
     if (isset($info['contexts']) && is_array($info['contexts'])) {
-      // @todo
+      foreach ($info['contexts'] as $id => $context) {
+        
+        // Support the traditional Ctools way of adding contexts.
+        if (is_object($context) && is_a($context, 'ctools_context_required')) {
+          $types[$name]['required context'][] = $context;
+        }
+        
+        // Derive the desired context.
+        elseif (isset($context['keywords'])) {
+          $required = isset($context['required']) ? $context['required'] : TRUE;
+          $context_class = ($required) ? 'ctools_context_required' : 'ctools_context_optional';
+          $title = isset($context['title']) ? $context['title'] : t('Context');
+          if (isset($context['restrictions']) && is_array($context['restrictions'])) {
+            $types[$name]['required context'][] = new $context_class($title, $context['keywords'], $context['restrictions']);
+          }
+          else {
+            $types[$name]['required context'][] = new $context_class($title, $context['keywords']);
+          }
+        }
+      }
     }
     
     // Set any contexts for arguments
