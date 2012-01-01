@@ -92,15 +92,15 @@ function contextual_forms_content_type_info() {
         }
         
         // Derive the desired context.
-        elseif (isset($context['keywords'])) {
+        elseif (isset($context['keyword'])) {
           $required = isset($context['required']) ? $context['required'] : TRUE;
           $context_class = ($required) ? 'ctools_context_required' : 'ctools_context_optional';
           $title = isset($context['title']) ? $context['title'] : t('Context');
           if (isset($context['restrictions']) && is_array($context['restrictions'])) {
-            $types[$name]['required context'][] = new $context_class($title, $context['keywords'], $context['restrictions']);
+            $types[$name]['required context'][] = new $context_class($title, $context['keyword'], $context['restrictions']);
           }
           else {
-            $types[$name]['required context'][] = new $context_class($title, $context['keywords']);
+            $types[$name]['required context'][] = new $context_class($title, $context['keyword']);
           }
         }
       }

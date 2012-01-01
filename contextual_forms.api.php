@@ -16,15 +16,22 @@
  *     - module: (optional) The module owning the include file. Auto-derived.
  *     - name: The name of file to load, without extension
  *     - type: (optional) The type of include file, defaults to 'inc'
- * - arguments: (optional) A keyed array of arguments to pass into the form
- *   builder. These actually are converted to Ctools contexts. The keys must
- *   represent existing Ctools contexts, and each item in the array should
- *   provide the following keys:
- *     - title: The label for the context
- *     - type: the type of Ctools context class to use for generating the
- *       context. Allowed values are "optional" or "required"
- *     Alternatively, you can also just provide a string value for the label,
- *     which will then use the default type of "required"
+ * - contexts: (optional) An array of Ctools contexts to use as the form's
+ *   arguments. Can either be Ctools context objects, or list of arrays
+ *   containing the following keys:
+ *     - title: The title of the context, use in UI selectors when multiple
+ *       contexts qualify.
+ *     - keyword: The name of the desired context. Usually this would be the
+ *       name of an entity, like 'node', or 'user' but can also be a myriad of
+ *       things. Use ctools_get_contexts() to see the list of possible contexts.
+ *     - restrictions: (optional) an array of restrictions to narrow down the
+ *       type of context that can be accepted. For instance, if the context is
+ *       'node' then a restriction we may add is 'type' to equal 'story' if we
+ *       only allow story node types.
+ *     - required: (optional) Boolean value to determine if this context is
+ *       absolutely required or not. Specifically, this influences whether
+ *       `ctools_context_required` or `ctools_context_optional` is called.
+ * - arguments: Deprecated, use 'contexts' instead.
  */
 function hook_contextual_forms_info() {
   $forms['mymod_subscribe'] = array(
@@ -38,12 +45,16 @@ function hook_contextual_forms_info() {
       'type' => 'inc',
     ),
     'function' => 'mymod_subscribe',
-    'arguments' => array(
-      'node' => t('Node'),
-      'string' = array(
-        'title' => t('Operation'),
-        'type' => 'optional',
-      ),
+    
+    'contexts' => array(
+      new ctools_context_required(t('Newsletter'), 'node'),
+      new ctools_context_optional(t('Subscriber'), 'user'),
+      // Subscriber can optionally be expressed like this:
+      // array(
+      //   'title' => t('Subscriber'),
+      //   'keyword' => 'user',
+      //   'required' => FALSE,
+      // ),
     ),
   );
   
