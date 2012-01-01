@@ -32,11 +32,15 @@ function user_contextual_forms_info() {
       'name' => 'user.pages',
       'type' => 'inc',
     ),
-    'arguments' => array(
-      'user' => t('User'),
-      'string' => array(
+    'contexts' => array(
+      array(
+        'title' => t('User'),
+        'keyword' => 'user',
+      ),
+      array(
         'title' => t('Category'),
-        'type' => 'optional',
+        'keyword' => 'string',
+        'required' => FALSE,
       ),
     ),
   );
