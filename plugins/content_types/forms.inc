@@ -81,6 +81,7 @@ function contextual_forms_content_type_info() {
     $types[$name] = array(
       'title' => $info['title'],
       'description' => $info['description'],
+      'category' => $info['category'],
     ) + _contextual_forms_content_type_defaults();
     
     if (isset($info['contexts']) && is_array($info['contexts'])) {
@@ -168,7 +169,6 @@ function contextual_forms_forms_content_type_admin_info($subtype, $conf, $contex
  */
 function _contextual_forms_content_type_defaults() {
   return array(
-    'category' => t('Contextual Forms'),
     'icon' => 'forms.png',
   );
 }

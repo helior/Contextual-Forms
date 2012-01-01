@@ -25,12 +25,7 @@ function contextual_forms_ctools_plugin_directory($owner, $api) {
  * Retrieve the results of hook_contextual_forms_info().
  */
 function contextual_forms_info() {
-  if ($info = cache_get(__FUNCTION__)) {
-    $info = $info->data;
-  }
-
-  // Build info and cache it.
-  else {
+  if (!$info = &drupal_static(__FUNCTION__, NULL)) {
     $hook = 'contextual_forms_info';
     foreach (module_implements($hook) as $module) {
       $results = array();
@@ -43,15 +38,14 @@ function contextual_forms_info() {
           'description' => '',
           'module' => $module,
           'function' => $name,
+          'category' => t('Contextual Forms'),
         );
         $info[$name] = $result;
       }
     }
 
     drupal_alter('contextual_forms_info', $info);
-    cache_set(__FUNCTION__, $info);
   }
-
   return $info;
 }
 
