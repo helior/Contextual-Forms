@@ -54,3 +54,15 @@ function contextual_forms_info() {
 
   return $info;
 }
+
+/**
+ * Implements hook_cron().
+ * @todo remove in first beta release.
+ */
+function contextual_forms_cron() {
+  foreach (contextual_forms_info() as $info) {
+    if (isset($info['arguments'])) {
+      watchdog('contextual_forms', '"arguments" key is deprecated in hook_contextual_forms_info(), use "contexts" instead. see API documentation, then update %function.', array('%function' => $info['module'] . '_contextual_forms_info()'), WATCHDOG_WARNING);
+    }
+  }
+}

@@ -82,9 +82,14 @@ function contextual_forms_content_type_info() {
       'title' => $info['title'],
       'description' => $info['description'],
     ) + _contextual_forms_content_type_defaults();
-
+    
+    if (isset($info['contexts']) && is_array($info['contexts'])) {
+      // @todo
+    }
+    
     // Set any contexts for arguments
-    if (isset($info['arguments']) && is_array($info['arguments'])) {
+    // @deprecated use 'contexts' key in hook_contextual_forms_info() instead.
+    elseif (isset($info['arguments']) && is_array($info['arguments'])) {
       foreach ($info['arguments'] as $keyword => $context_info) {
 
         // simple argument will just use the default 'required' context.
